@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التجربة - AlgoGenius</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dark-slate: #222831;
+            --medium-gray: #393E46;
+            --sage-green: #948979;
+            --cream-beige: #DFD0B8;
+            --text-light: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-slate);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(34, 40, 49, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--sage-green);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--cream-beige) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--cream-beige);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--sage-green);
+            background: rgba(148, 137, 121, 0.1);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--cream-beige) 0%, var(--sage-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--cream-beige);
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: var(--medium-gray);
+            padding: 0;
+            border-radius: 25px;
+            border: 2px solid var(--sage-green);
+            margin-bottom: 3rem;
+            overflow: hidden;
+        }
+
+        .upload-header {
+            background: linear-gradient(135deg, var(--sage-green), var(--cream-beige));
+            padding: 2rem 2.5rem;
+            text-align: center;
+        }
+
+        .upload-header-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--dark-slate);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-header-subtitle {
+            font-size: 1rem;
+            color: var(--dark-slate);
+            opacity: 0.8;
+        }
+
+        .upload-body {
+            padding: 2.5rem;
+        }
+
+        .upload-area {
+            border: 3px dashed var(--sage-green);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s;
+            background: var(--dark-slate);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(148, 137, 121, 0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: all 0.4s;
+            border-radius: 50%;
+        }
+
+        .upload-area:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .upload-area:hover {
+            border-color: var(--cream-beige);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(148, 137, 121, 0.3);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--cream-beige);
+            background: rgba(148, 137, 121, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            color: var(--sage-green);
+            animation: float 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .upload-text {
+            font-size: 1.4rem;
+            color: var(--cream-beige);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-hint {
+            color: var(--sage-green);
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-info {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--dark-slate);
+            border-radius: 15px;
+            border: 2px solid var(--sage-green);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-info::before {
+            content: '✓';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 8rem;
+            color: var(--sage-green);
+            opacity: 0.05;
+        }
+
+        .file-info.active {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .file-info-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--sage-green);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-info-content {
+            color: var(--cream-beige);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .file-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(148, 137, 121, 0.2);
+        }
+
+        .file-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-info-label {
+            color: var(--sage-green);
+            font-weight: 600;
+        }
+
+        .file-info-value {
+            color: var(--cream-beige);
+        }
+
+        /* Settings Section */
+        .settings-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--dark-slate);
+            border-radius: 20px;
+            border: 2px solid var(--sage-green);
+        }
+
+        .settings-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--sage-green);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .settings-subtitle {
+            color: var(--cream-beige);
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .parameter-card {
+            background: var(--medium-gray);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .parameter-card:hover {
+            border-color: var(--sage-green);
+            transform: translateX(-5px);
+        }
+
+        .parameter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .parameter-info {
+            flex: 1;
+        }
+
+        .parameter-label {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--cream-beige);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .parameter-icon {
+            font-size: 1.3rem;
+        }
+
+        .parameter-description {
+            font-size: 0.9rem;
+            color: var(--sage-green);
+            opacity: 0.9;
+        }
+
+        .parameter-value-display {
+            background: var(--sage-green);
+            color: var(--dark-slate);
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .slider-container {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: var(--dark-slate);
+            outline: none;
+            -webkit-appearance: none;
+            position: relative;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--sage-green);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(148, 137, 121, 0.4);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: var(--cream-beige);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--sage-green);
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(148, 137, 121, 0.4);
+        }
+
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            background: var(--cream-beige);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--sage-green);
+        }
+
+        .slider-track-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 8px;
+            background: var(--sage-green);
+            border-radius: 5px;
+            pointer-events: none;
+            transform: translateY(-50%);
+            transition: width 0.1s;
+        }
+
+        /* Button */
+        .btn-optimize {
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--sage-green), var(--cream-beige));
+            color: var(--dark-slate);
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(148, 137, 121, 0.3);
+        }
+
+        .btn-optimize::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-optimize:hover:not(:disabled)::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-optimize:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(148, 137, 121, 0.5);
+        }
+
+        .btn-optimize:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .btn-optimize:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: var(--medium-gray);
+            box-shadow: none;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            margin-top: 2rem;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid var(--medium-gray);
+            border-top-color: var(--sage-green);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--cream-beige);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Results Section */
+        .results {
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .results-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--sage-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .results-subtitle {
+            font-size: 1.1rem;
+            color: var(--cream-beige);
+        }
+
+        /* Metrics Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: var(--medium-gray);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--sage-green);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(148, 137, 121, 0.3);
+            border-color: var(--cream-beige);
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--sage-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.95rem;
+            color: var(--cream-beige);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            margin-top: 3rem;
+        }
+
+        .chart-container {
+            background: var(--medium-gray);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid var(--sage-green);
+            margin-bottom: 2.5rem;
+        }
+
+        .chart-header {
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cream-beige);
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-subtitle {
+            font-size: 0.95rem;
+            color: var(--sage-green);
+        }
+
+        .chart-canvas {
+            width: 100%;
+            min-height: 400px;
+            background: var(--dark-slate);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        /* SVG Chart Styles */
+        svg {
+            overflow: visible;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke-width: 3;
+        }
+
+        .chart-area {
+            opacity: 0.2;
+        }
+
+        .chart-point {
+            transition: all 0.2s;
+        }
+
+        .chart-point:hover {
+            r: 6;
+        }
+
+        .chart-bar {
+            transition: all 0.3s;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+
+        .axis-line {
+            stroke: var(--sage-green);
+            stroke-width: 2;
+        }
+
+        .grid-line {
+            stroke: var(--medium-gray);
+            stroke-width: 1;
+            stroke-dasharray: 5, 5;
+        }
+
+        .axis-label {
+            fill: var(--cream-beige);
+            font-size: 12px;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .legend-label {
+            color: var(--cream-beige);
+            font-size: 0.9rem;
+        }
+
+        /* Features List */
+        .features-section {
+            background: var(--medium-gray);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid var(--sage-green);
+            margin-top: 3rem;
+        }
+
+        .features-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--sage-green);
+        }
+
+        .features-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cream-beige);
+        }
+
+        .features-count {
+            background: var(--sage-green);
+            color: var(--dark-slate);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .feature-item {
+            padding: 1rem 1.5rem;
+            background: var(--dark-slate);
+            border: 2px solid var(--sage-green);
+            border-radius: 10px;
+            text-align: center;
+            color: var(--cream-beige);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .feature-item:hover {
+            border-color: var(--cream-beige);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(148, 137, 121, 0.2);
+        }
+
+        /* Error Message */
+        .error-msg {
+            display: none;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            background: rgba(255, 82, 82, 0.15);
+            border: 2px solid #ff5252;
+            border-radius: 10px;
+            color: #ff8a80;
+            font-weight: 600;
+        }
+
+        .error-msg.active {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .upload-header-title {
+                font-size: 1.4rem;
+            }
+
+            .parameter-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .parameter-value-display {
+                align-self: stretch;
+                text-align: center;
+            }
+
+            .upload-icon {
+                font-size: 3.5rem;
+            }
+
+            .upload-area {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        /* Accessibility improvements */
+        input[type="range"]:focus {
+            outline: 2px solid var(--cream-beige);
+            outline-offset: 3px;
+        }
+
+        .btn-optimize:focus {
+            outline: 3px solid var(--cream-beige);
+            outline-offset: 3px;
+        }
+
+        /* Smooth transitions for all interactive elements */
+        * {
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        input[type="range"],
+        .upload-area::before,
+        .btn-optimize::before,
+        .spinner {
+            transition: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="/" class="logo">AlgoGenius</a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">الرئيسية</a>
+            <a href="/members" class="nav-link">الأعضاء</a>
+            <a href="/algorithms" class="nav-link">الخوارزميات</a>
+            <a href="/course-info" class="nav-link">معلومات المادة</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">مختبر التحسين الجيني</h1>
+            <p class="page-subtitle">جرّب الخوارزمية الجينية المتقدمة على بياناتك</p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="upload-header">
+                <h2 class="upload-header-title">📁 تحميل البيانات</h2>
+                <p class="upload-header-subtitle">ارفع ملف CSV أو Excel لبدء التحسين الجيني</p>
+            </div>
+
+            <div class="upload-body">
+            <div class="upload-area" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📊</div>
+                    <div class="upload-text">اسحب الملف هنا أو انقر للاختيار</div>
+                    <div class="upload-hint">يدعم: CSV, XLSX, XLS | الحجم الأقصى: 32 ميجابايت</div>
+            </div>
+            
+            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" />
+            
+                <div class="file-info" id="fileInfo">
+                    <div class="file-info-title">
+                        <span>✓</span>
+                        <span>تم تحميل الملف بنجاح</span>
+                    </div>
+                    <div class="file-info-content" id="fileInfoContent"></div>
+                </div>
+
+                <!-- Settings Section -->
+                <div class="settings-section" id="settingsSection" style="display: none;">
+                    <h3 class="settings-title">
+                        <span>⚙️</span>
+                        <span>معاملات الخوارزمية الجينية</span>
+                    </h3>
+                    <p class="settings-subtitle">اضبط المعاملات للحصول على أفضل أداء</p>
+
+                    <!-- Population Size -->
+                    <div class="parameter-card">
+                        <div class="parameter-header">
+                            <div class="parameter-info">
+                                <div class="parameter-label">
+                                    <span class="parameter-icon">👥</span>
+                                    <span>حجم التجمع السكاني</span>
+                </div>
+                                <div class="parameter-description">عدد الحلول المرشحة في كل جيل</div>
+                </div>
+                            <div class="parameter-value-display" id="populationValue">60</div>
+                </div>
+                        <div class="slider-container">
+                            <input type="range" id="populationSize" min="30" max="120" value="60" step="10" />
+                            <div class="slider-labels">
+                                <span>30</span>
+                                <span>120</span>
+            </div>
+            </div>
+        </div>
+
+                    <!-- Generations -->
+                    <div class="parameter-card">
+                        <div class="parameter-header">
+                            <div class="parameter-info">
+                                <div class="parameter-label">
+                                    <span class="parameter-icon">🔄</span>
+                                    <span>عدد الأجيال</span>
+                </div>
+                                <div class="parameter-description">عدد دورات التطور التي ستنفذها الخوارزمية</div>
+            </div>
+                            <div class="parameter-value-display" id="generationsValue">50</div>
+            </div>
+                        <div class="slider-container">
+                            <input type="range" id="generations" min="20" max="100" value="50" step="10" />
+                            <div class="slider-labels">
+                                <span>20</span>
+                                <span>100</span>
+                    </div>
+                        </div>
+                </div>
+
+                    <!-- Mutation Rate -->
+                    <div class="parameter-card">
+                        <div class="parameter-header">
+                            <div class="parameter-info">
+                                <div class="parameter-label">
+                                    <span class="parameter-icon">🧬</span>
+                                    <span>معدل الطفرة</span>
+                    </div>
+                                <div class="parameter-description">احتمالية حدوث طفرات عشوائية في الجينات</div>
+                </div>
+                            <div class="parameter-value-display" id="mutationValue">0.15</div>
+                    </div>
+                        <div class="slider-container">
+                            <input type="range" id="mutationRate" min="0.05" max="0.30" value="0.15" step="0.05" />
+                            <div class="slider-labels">
+                                <span>0.05</span>
+                                <span>0.30</span>
+                </div>
+                    </div>
+                </div>
+            </div>
+
+                <button class="btn-optimize" id="optimizeBtn" onclick="startOptimization()" disabled>
+                    🧬 ابدأ التحسين الجيني
+                </button>
+
+                <div class="error-msg" id="errorMsg"></div>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p class="loading-text">التطور الجيني قيد التنفيذ...</p>
+            </div>
+                </div>
+                </div>
+
+        <!-- Results Section -->
+        <div class="results" id="results">
+            <div class="results-header">
+                <h2 class="results-title">نتائج التحسين الجيني</h2>
+                <p class="results-subtitle">تحليل شامل لأداء الخوارزمية التطورية</p>
+            </div>
+
+            <!-- Metrics -->
+            <div class="metrics-grid" id="metricsGrid"></div>
+
+            <!-- Charts -->
+            <div class="charts-section">
+                <!-- Evolution Progress Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">تطور اللياقة عبر الأجيال</h3>
+                        <p class="chart-subtitle">مسار تحسين الخوارزمية الجينية</p>
+                </div>
+                    <div class="chart-canvas" id="evolutionChart"></div>
+                    <div class="chart-legend" id="evolutionLegend"></div>
+            </div>
+
+                <!-- Diversity Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">التنوع الجيني ومعدل الطفرة</h3>
+                        <p class="chart-subtitle">ديناميكية الاستكشاف والاستغلال</p>
+        </div>
+                    <div class="chart-canvas" id="diversityChart"></div>
+                    <div class="chart-legend" id="diversityLegend"></div>
+    </div>
+
+                <!-- Feature Importance Chart -->
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3 class="chart-title">أهمية السمات المختارة</h3>
+                        <p class="chart-subtitle">توزيع الأهمية النسبية</p>
+                </div>
+                    <div class="chart-canvas" id="importanceChart"></div>
+                </div>
+                </div>
+
+            <!-- Features List -->
+            <div class="features-section">
+                <div class="features-header">
+                    <h3 class="features-title">السمات المحسّنة المختارة</h3>
+                    <span class="features-count" id="featuresCount">0</span>
+                </div>
+                <div class="features-grid" id="featuresList"></div>
+                </div>
+                </div>
+    </div>
+
+    <script src="/static/charts.js"></script>
+    <script src="/static/demo.js"></script>
+</body>
+</html>

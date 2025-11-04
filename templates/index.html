@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoGenius - Intelligent Algorithms Laboratory</title>
+    <style>
+        /* Global Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Color Palette */
+        :root {
+            --dark-slate: #222831;
+            --medium-gray: #393E46;
+            --sage-green: #948979;
+            --cream-beige: #DFD0B8;
+            --text-light: #ffffff;
+            --text-dark: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-slate);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(148, 137, 121, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(223, 208, 184, 0.08) 0%, transparent 50%);
+            z-index: -1;
+            animation: bgShift 15s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Navigation */
+        nav {
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(34, 40, 49, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--sage-green);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--cream-beige) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--cream-beige);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--sage-green);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--sage-green);
+            background: rgba(148, 137, 121, 0.1);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 2rem;
+            background: var(--sage-green);
+            color: var(--dark-slate);
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: var(--cream-beige);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(148, 137, 121, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 5% 6rem;
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--cream-beige) 0%, var(--sage-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: var(--cream-beige);
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .hero-btn {
+            padding: 1.2rem 3rem;
+            background: var(--sage-green);
+            color: var(--dark-slate);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .hero-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--sage-green);
+            color: var(--sage-green);
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(148, 137, 121, 0.4);
+        }
+
+        .hero-btn.secondary:hover {
+            background: var(--sage-green);
+            color: var(--dark-slate);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--sage-green);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--cream-beige);
+            margin-bottom: 4rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background: var(--medium-gray);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--sage-green), var(--cream-beige));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--sage-green);
+            box-shadow: 0 20px 40px rgba(148, 137, 121, 0.2);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(148, 137, 121, 0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--sage-green);
+        }
+
+        .feature-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--cream-beige);
+        }
+
+        .feature-description {
+            color: var(--cream-beige);
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        /* Quick Links Section */
+        .quick-links {
+            padding: 6rem 5%;
+            background: var(--medium-gray);
+            border-top: 2px solid var(--sage-green);
+            border-bottom: 2px solid var(--sage-green);
+        }
+
+        .links-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .link-card {
+            background: var(--dark-slate);
+            padding: 2.5rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid var(--sage-green);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--text-light);
+            display: block;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(148, 137, 121, 0.3);
+            border-color: var(--cream-beige);
+        }
+
+        .link-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .link-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--sage-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .link-description {
+            color: var(--cream-beige);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            text-align: center;
+            background: var(--dark-slate);
+            border-top: 2px solid var(--sage-green);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--cream-beige) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-description {
+            color: var(--medium-gray);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-copyright {
+            color: var(--medium-gray);
+            padding-top: 2rem;
+            border-top: 1px solid var(--medium-gray);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.3rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Mobile Menu Toggle (for small screens) */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--cream-beige);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--dark-slate);
+                flex-direction: column;
+                padding: 2rem;
+                border-top: 2px solid var(--sage-green);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="/" class="logo">AlgoGenius</a>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <div class="nav-links" id="navLinks">
+            <a href="/" class="nav-link">الرئيسية</a>
+            <a href="/members" class="nav-link">الأعضاء</a>
+            <a href="/algorithms" class="nav-link">الخوارزميات</a>
+            <a href="/course-info" class="nav-link">معلومات المادة</a>
+            <a href="/demo" class="nav-btn">التجربة</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>AlgoGenius</h1>
+        <p class="hero-subtitle">مختبر الخوارزميات الذكية</p>
+        <p class="hero-description">
+            منصة متقدمة لتحسين السمات باستخدام الخوارزميات التطورية. اكتشف القوة الخفية للبيانات من خلال 
+            تقنيات الذكاء الاصطناعي والبيولوجيا الحسابية. نحن نستخدم خوارزميات مستوحاة من الطبيعة لإيجاد 
+            الحلول المثلى في عالم التعلم الآلي.
+        </p>
+        <div class="hero-buttons">
+            <a href="/demo" class="hero-btn">ابدأ التجربة</a>
+            <a href="/algorithms" class="hero-btn secondary">تعرف على الخوارزميات</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2 class="section-title">مميزات المنصة</h2>
+        <p class="section-subtitle">تقنيات متقدمة لتحسين أداء نماذج التعلم الآلي</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🧬</div>
+                <h3 class="feature-title">خوارزميات تطورية</h3>
+                <p class="feature-description">
+                    استخدم قوة التطور البيولوجي في اختيار السمات. خوارزميات مستوحاة من الانتقاء الطبيعي 
+                    والطفرات الجينية لتحديد أفضل مجموعات السمات.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3 class="feature-title">اختيار ذكي</h3>
+                <p class="feature-description">
+                    تحديد تلقائي للسمات الأكثر أهمية مع إزالة التكرار والضوضاء. 
+                    حافظ على دقة عالية مع تقليل الأبعاد بشكل كبير.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">تحليل شامل</h3>
+                <p class="feature-description">
+                    قارن النتائج التطورية مع الطرق التقليدية مثل F-test، Mutual Information، 
+                    RFE، واختيار السمات القائم على الأشجار.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">أداء محسّن</h3>
+                <p class="feature-description">
+                    قلل الأبعاد بنسبة 30-70% مع الحفاظ على الدقة أو تحسينها. 
+                    سرعة تدريب أكبر وتقليل مخاطر الإفراط في التكييف.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🔬</div>
+                <h3 class="feature-title">منهج علمي</h3>
+                <p class="feature-description">
+                    مبني على مبادئ التعلم الآلي المثبتة مع التحقق المتقاطع والدقة الإحصائية. 
+                    نتائج موثوقة وقابلة للتكرار.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3 class="feature-title">سهولة الاستخدام</h3>
+                <p class="feature-description">
+                    واجهة بسيطة لرفع ملفات CSV - لا حاجة للبرمجة. احصل على رؤى 
+                    قيمة في دقائق معدودة.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Links Section -->
+    <section class="quick-links">
+        <div class="links-container">
+            <h2 class="section-title">استكشف المنصة</h2>
+            <p class="section-subtitle">تصفح الأقسام المختلفة واكتشف المزيد</p>
+            
+            <div class="links-grid">
+                <a href="/members" class="link-card">
+                    <div class="link-icon">👥</div>
+                    <h3 class="link-title">فريق العمل</h3>
+                    <p class="link-description">تعرف على أعضاء الفريق الذين عملوا على هذا المشروع</p>
+                </a>
+
+                <a href="/algorithms" class="link-card">
+                    <div class="link-icon">🔬</div>
+                    <h3 class="link-title">الخوارزميات</h3>
+                    <p class="link-description">تعرف على الخوارزميات المستخدمة وكيفية عملها</p>
+                </a>
+
+                <a href="/course-info" class="link-card">
+                    <div class="link-icon">📚</div>
+                    <h3 class="link-title">معلومات المادة</h3>
+                    <p class="link-description">معلومات عامة عن مادة الخوارزميات الذكية</p>
+                </a>
+
+                <a href="/demo" class="link-card">
+                    <div class="link-icon">🚀</div>
+                    <h3 class="link-title">جرب الآن</h3>
+                    <p class="link-description">ابدأ تجربة المنصة واختبر خوارزمياتنا</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <h2 class="footer-title">AlgoGenius</h2>
+            <p class="footer-description">
+                منصة متقدمة لتحسين السمات باستخدام الخوارزميات التطورية والذكاء الاصطناعي. 
+                نهدف إلى جعل التعلم الآلي أكثر كفاءة وفعالية.
+            </p>
+            <div class="footer-copyright">
+                <p>&copy; 2025 AlgoGenius - Intelligent Algorithms Laboratory. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
+
